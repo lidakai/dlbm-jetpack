@@ -1,6 +1,5 @@
 package com.example.dlbm
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -26,64 +25,56 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.example.dlbm.ui.components.NavigationBarItem
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.res.stringResource
-import com.example.dlbm.ui.components.SootheBottomNavigation
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.dlbm.config.NavigationGraph
 
 class MainActivity : ComponentActivity() {
 
     @OptIn(ExperimentalMaterial3Api::class)
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
+           val navController: NavHostController = rememberNavController()
             DlbmTheme {
-                var selectedItem by remember { mutableStateOf("home") }
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Scaffold(
-                        bottomBar = {
-                            SootheBottomNavigation(
-                                selectedItem = selectedItem,
-                                onItemSelected = { selectedItem = it },
-                                items = listOf(
-                                    NavigationBarItem(
-                                        route = "home",
-                                        icon = Icons.Default.Home,
-                                        title = stringResource(R.string.bottom_navigation_home)
-                                    ),
-                                    NavigationBarItem(
-                                        route = "toolbox",
-                                        icon = Icons.Default.Face,
-                                        title = stringResource(R.string.bottom_navigation_toolbox)
-                                    ),
-                                    NavigationBarItem(
-                                        route = "price",
-                                        icon = Icons.Default.ShoppingCart,
-                                        title = stringResource(R.string.bottom_navigation_price)
-                                    ), NavigationBarItem(
-                                        route = "user",
-                                        icon = Icons.Default.Person,
-                                        title = stringResource(R.string.bottom_navigation_user)
-                                    )
-                                )
-                            )
-                        },
-                        content = {
-                            MessageCard(Message("Android", "Jetpack Compose"))
-                        }
-                    )
+                    NavigationGraph(navController)
+//                    MessageCard(Message("Android", "Jetpack Compose"))
+//                    Scaffold(
+//                        bottomBar = {
+//                            SootheBottomNavigation(
+//                                selectedItem = "home",
+//                                navController = NavHostController,
+//                                items = listOf(
+//                                    NavigationBarItem(
+//                                        route = "home",
+//                                        icon = Icons.Default.Home,
+//                                        title = stringResource(R.string.bottom_navigation_home)
+//                                    ),
+//                                    NavigationBarItem(
+//                                        route = "toolbox",
+//                                        icon = Icons.Default.Face,
+//                                        title = stringResource(R.string.bottom_navigation_toolbox)
+//                                    ),
+//                                    NavigationBarItem(
+//                                        route = "price",
+//                                        icon = Icons.Default.ShoppingCart,
+//                                        title = stringResource(R.string.bottom_navigation_price)
+//                                    ), NavigationBarItem(
+//                                        route = "user",
+//                                        icon = Icons.Default.Person,
+//                                        title = stringResource(R.string.bottom_navigation_user)
+//                                    )
+//                                )
+//                            )
+//                        },
+//                    )(
+
+//                    )
                 }
             }
         }
