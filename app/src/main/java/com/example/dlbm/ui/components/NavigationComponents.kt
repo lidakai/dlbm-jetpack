@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavHostController
+import com.example.dlbm.config.Screen
 
 
 data class NavigationBarItem(
@@ -20,14 +21,14 @@ data class NavigationBarItem(
 @Composable
 fun SootheBottomNavigation(
     navController: NavHostController,
-    selectedItem: String,
+    selectedItem: String?,
     items: List<NavigationBarItem>
 ) {
     NavigationBar(
         modifier = Modifier,
     ) {
         items.forEach { item ->
-            val selected = selectedItem == item.route
+            val selected =  if(selectedItem == null)  item.route == Screen.Home.route  else item.route == selectedItem;
             NavigationBarItem(
                 icon = { Icon(item.icon, contentDescription = item.title) },
                 label = { Text(item.title) },

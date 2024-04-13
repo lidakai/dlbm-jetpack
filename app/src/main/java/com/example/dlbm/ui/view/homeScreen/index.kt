@@ -9,12 +9,14 @@ import com.example.dlbm.config.Screen
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
-    Column {
-        Text("Home Screen")
-        Button(onClick = {
-            navController.navigate(Screen.Details.createRoute(42))
-        }) {
-            Text("Go to Details")
-        }
-    }
+
+     Column {
+                                Text("Home Screen")
+                                Button(onClick = {
+                                    navController.navigate(Screen.Details.createRoute(42))
+                                }) {
+                                    Text("Go to Details")
+                                }
+                            }
+
 }

@@ -1,5 +1,6 @@
 package com.example.dlbm
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,16 +22,28 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.size
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.dlbm.config.NavigationGraph
+import com.example.dlbm.config.Screen
+import com.example.dlbm.ui.components.NavigationBarItem
+import com.example.dlbm.ui.components.SootheBottomNavigation
 
 class MainActivity : ComponentActivity() {
 
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,39 +55,43 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    NavigationGraph(navController)
-//                    MessageCard(Message("Android", "Jetpack Compose"))
-//                    Scaffold(
-//                        bottomBar = {
-//                            SootheBottomNavigation(
-//                                selectedItem = "home",
-//                                navController = NavHostController,
-//                                items = listOf(
-//                                    NavigationBarItem(
-//                                        route = "home",
-//                                        icon = Icons.Default.Home,
-//                                        title = stringResource(R.string.bottom_navigation_home)
-//                                    ),
-//                                    NavigationBarItem(
-//                                        route = "toolbox",
-//                                        icon = Icons.Default.Face,
-//                                        title = stringResource(R.string.bottom_navigation_toolbox)
-//                                    ),
-//                                    NavigationBarItem(
-//                                        route = "price",
-//                                        icon = Icons.Default.ShoppingCart,
-//                                        title = stringResource(R.string.bottom_navigation_price)
-//                                    ), NavigationBarItem(
-//                                        route = "user",
-//                                        icon = Icons.Default.Person,
-//                                        title = stringResource(R.string.bottom_navigation_user)
-//                                    )
-//                                )
-//                            )
-//                        },
-//                    )(
+                    Scaffold(
+                        bottomBar = {
+//                            name: String = "World"
+                            BottomNavigationVisibility(navController) { showBottomBar,router ->
+                                if (showBottomBar) {
+                                    SootheBottomNavigation(
+                                        selectedItem = router,
+                                        navController = navController,
+                                        items = listOf(
+                                            NavigationBarItem(
+                                                route = Screen.Home.route,
+                                                icon = Icons.Default.Home,
+                                                title = stringResource(R.string.bottom_navigation_home)
+                                            ),
+                                            NavigationBarItem(
+                                                route = Screen.Toolbox.route,
+                                                icon = Icons.Default.Face,
+                                                title = stringResource(R.string.bottom_navigation_toolbox)
+                                            ),
+                                            NavigationBarItem(
+                                                route = Screen.Shopping.route,
+                                                icon = Icons.Default.ShoppingCart,
+                                                title = stringResource(R.string.bottom_navigation_price)
+                                            ), NavigationBarItem(
+                                                route = Screen.User.route,
+                                                icon = Icons.Default.Person,
+                                                title = stringResource(R.string.bottom_navigation_user)
+                                            )
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                    ) {
+                        NavigationGraph(navController)
+                    }
 
-//                    )
                 }
             }
         }
@@ -99,7 +116,6 @@ fun AnimatedGif() {
 fun MessageCard(msg: Message) {
     Row {
         AnimatedGif()
-        // Add a horizontal space between the image and the column
         Spacer(modifier = Modifier.width(18.dp))
         Column {
             Text(
@@ -127,3 +143,16 @@ fun PreviewMessageCard() {
     )
 }
 
+
+// 检查是否应显示底部导航栏
+@Composable
+private fun BottomNavigationVisibility(
+    navController: NavHostController,
+    content: @Composable (Boolean,String?) -> Unit
+) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+     val router =  navBackStackEntry?.destination?.route
+    val showBottomBar = router == Screen.Home.route || router == Screen.Toolbox.route || router == Screen.User.route || router == Screen.Shopping.route
+
+    content(showBottomBar,router)
+}
