@@ -14,7 +14,6 @@ import com.example.dlbm.ui.view.shopping.ShoppingScreen
 import com.example.dlbm.ui.view.toolbox.Toolbox
 import com.example.dlbm.ui.view.user.UserScreen
 
-//
 
 sealed class Screen(val route: String) {
     object Home : Screen("home")
